@@ -14,8 +14,9 @@ export interface Pet {
 export interface MedicalRecord {
   id: string;
   date: number;
-  type: 'symptom' | 'diagnosis' | 'treatment';
-  description: string;
+  symptoms: string;
+  diagnosis: string;
+  treatment: string;
   notes?: string;
   createdAt: number;
 }
@@ -36,8 +37,9 @@ export class UpdatePetDto {
 }
 
 export class AddMedicalRecordDto {
-  type: 'symptom' | 'diagnosis' | 'treatment';
-  description: string;
+  symptoms: string;
+  diagnosis: string;
+  treatment: string;
   notes?: string;
   date: number;
 } 

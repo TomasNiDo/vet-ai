@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { FirebaseAuthGuard } from '../firebase/guards/firebase-auth.guard';
 import { PetService } from './pet.service';
-import { CreatePetDto, UpdatePetDto } from './dto/pet.dto';
+import { CreatePetDto, UpdatePetDto, AddMedicalRecordDto } from './dto/pet.dto';
 
 @Controller('pets')
 @UseGuards(FirebaseAuthGuard)
@@ -101,4 +101,25 @@ export class PetController {
       );
     }
   }
-} 
+
+  @Post(':id/medical-records')
+  async addMedicalRecord(
+    @Request() req,
+    @Param('id') id: string,
+    @Body() dto: AddMedicalRecordDto,
+  ) {
+    try {
+      return await this.petService.addMedicalRecord(id, req.user.uid, dto);
+    } catch (error) {
+      console.error('Controller error - Add medical record:', error);
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: 'Failed to add medical record',
+          details: error.message,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+}

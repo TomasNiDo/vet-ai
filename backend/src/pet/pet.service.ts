@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, InternalServerErrorException } from '@nestjs/common';
 import { FirebaseService } from '../firebase/firebase.service';
-import { Pet, CreatePetDto, UpdatePetDto } from './dto/pet.dto';
+import { Pet, CreatePetDto, UpdatePetDto, AddMedicalRecordDto } from './dto/pet.dto';
 
 @Injectable()
 export class PetService {
@@ -58,6 +58,36 @@ export class PetService {
         throw error;
       }
       throw new InternalServerErrorException('Failed to get pet');
+    }
+  }
+
+  async addMedicalRecord(petId: string, ownerId: string, dto: AddMedicalRecordDto) {
+    try {
+      const pet = await this.getPet(petId, ownerId);
+      if (!pet) {
+        throw new NotFoundException('Pet not found');
+      }
+
+      const record = {
+        id: Date.now().toString(),
+        ...dto,
+        createdAt: Date.now(),
+      };
+
+      const medicalHistory = [...(pet.medicalHistory || []), record];
+
+      await this.petsRef.child(petId).update({
+        medicalHistory,
+        updatedAt: Date.now(),
+      });
+
+      return record;
+    } catch (error) {
+      console.error('Error adding medical record:', error);
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Failed to add medical record');
     }
   }
 

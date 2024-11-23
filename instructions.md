@@ -30,7 +30,7 @@
        - Name, species, breed, age, and weight.
        - **Medical history:** Includes symptoms, diagnoses, and treatments for each pet.
      - **Backend Storage:** 
-       - All pet-related data, including medical history, is securely stored in Firebase Firestore and managed by the NestJS backend.
+       - All pet-related data, including medical history, is securely stored in Firebase Realtime Database and managed by the NestJS backend.
      - **AI Integration:** 
        - The pet's profile and medical history data are fed into the AI model to generate tailored responses for each pet.
      - User-friendly interface for adding and editing pet details.
@@ -61,7 +61,7 @@
 1. **Gemini 1.5 Pro API**
    - Used to generate AI-driven responses for chat functionality.
    
-2. **Firebase Firestore**
+2. **Firebase Realtime Database**
    - Database for storing user and pet profiles, including medical histories.
 
 3. **Firebase Auth**
@@ -77,7 +77,7 @@
 - **Frontend:** Next.js (with TypeScript), TailwindCSS, Shadcn, Magic UI.
 - **Backend:** NestJS with RESTful APIs.
 - **Authentication:** Firebase Auth.
-- **Database:** Firebase Firestore for storing pet and user data.
+- **Database:** Firebase Realtime Database for storing pet and user data.
 
 ---
 

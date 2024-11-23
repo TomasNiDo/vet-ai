@@ -7,6 +7,7 @@ interface SelectProps<T extends string> {
   onValueChange: (value: T) => void;
   children: React.ReactNode;
   placeholder?: string;
+  displayValue?: string;
 }
 
 export interface SelectTriggerProps {
@@ -25,7 +26,8 @@ export function Select<T extends string>({
   value, 
   onValueChange, 
   children, 
-  placeholder 
+  placeholder,
+  displayValue,
 }: SelectProps<T>) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -44,7 +46,7 @@ export function Select<T extends string>({
   return (
     <div ref={ref} className="relative">
       <SelectTrigger onClick={() => setOpen(!open)}>
-        <SelectValue>{value || placeholder || 'Select option...'}</SelectValue>
+        <SelectValue>{displayValue || value || placeholder || 'Select option...'}</SelectValue>
       </SelectTrigger>
       {open && (
         <SelectContent>

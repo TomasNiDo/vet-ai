@@ -7,6 +7,8 @@ export interface ChatMessage {
 
 export class SendMessageDto {
   message: string;
+  petId?: string;
+  ownerId: string;
 }
 
 export interface ChatResponse {

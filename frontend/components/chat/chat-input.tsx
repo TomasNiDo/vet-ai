@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { SendIcon } from 'lucide-react';
@@ -10,6 +10,15 @@ interface ChatInputProps {
 export function ChatInput({ onSendMessage }: ChatInputProps) {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Auto-resize textarea
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  }, [input]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,6 +28,10 @@ export function ChatInput({ onSendMessage }: ChatInputProps) {
       setIsLoading(true);
       await onSendMessage(input);
       setInput('');
+      // Reset textarea height
+      if (textareaRef.current) {
+        textareaRef.current.style.height = 'auto';
+      }
     } catch (error) {
       console.error('Failed to send message:', error);
     } finally {
@@ -27,33 +40,44 @@ export function ChatInput({ onSendMessage }: ChatInputProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex items-end gap-2 p-3">
-      <Textarea
-        value={input}
-        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setInput(e.target.value)}
-        placeholder="Ask about your pet's health..."
-        className="min-h-[50px] max-h-[150px] resize-none"
-        disabled={isLoading}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            if (input.trim()) {
-              handleSubmit(e);
-            }
-          }
-        }}
-      />
-      <Button 
-        type="submit" 
-        disabled={isLoading}
-        className="h-[50px] w-[50px] p-0"
-      >
-        {isLoading ? (
-          <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-        ) : (
-          <SendIcon className="h-5 w-5" />
-        )}
-      </Button>
+    <form onSubmit={handleSubmit} className="p-4 bg-white border-t">
+      <div className="max-w-4xl mx-auto flex gap-2">
+        <div className="relative flex-1">
+          <Textarea
+            ref={textareaRef}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Type your message..."
+            className="min-h-[50px] max-h-[200px] pr-[5.5rem] resize-none py-3 px-4 rounded-full"
+            disabled={isLoading}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                if (input.trim()) {
+                  handleSubmit(e);
+                }
+              }
+            }}
+          />
+          <Button 
+            type="submit" 
+            size="icon"
+            disabled={isLoading || !input.trim()}
+            className="absolute right-2 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full"
+          >
+            {isLoading ? (
+              <div className="h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            ) : (
+              <SendIcon className="h-4 w-4" />
+            )}
+          </Button>
+        </div>
+      </div>
+      <div className="mt-2 text-center">
+        <p className="text-xs text-gray-500">
+          Press Enter to send, Shift + Enter for new line
+        </p>
+      </div>
     </form>
   );
 } 

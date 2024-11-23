@@ -7,5 +7,6 @@ import { FirebaseModule } from '../firebase/firebase.module';
   imports: [FirebaseModule],
   controllers: [PetController],
   providers: [PetService],
+  exports: [PetService],
 })
 export class PetModule {} 

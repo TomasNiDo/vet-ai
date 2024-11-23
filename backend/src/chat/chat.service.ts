@@ -2,31 +2,12 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { ChatResponse } from './dto/chat.dto';
+import { Pet } from '../pet/dto/pet.dto';
 
 @Injectable()
 export class ChatService implements OnModuleInit {
   private gemini;
-  private chat;
   private readonly apiKey: string;
-  private readonly SYSTEM_PROMPT = `You are an AI veterinary assistant designed to help pet owners with their pet health questions. Your role is to:
-
-1. Provide reliable, accurate, and actionable pet care information
-2. Answer questions about pet health and wellness
-3. Help identify potential symptoms and suggest appropriate next steps
-4. Offer emergency guidance when needed
-5. Share preventive care and wellness tips
-
-Important guidelines:
-- Always prioritize pet safety and well-being
-- Recommend veterinary consultation for serious concerns
-- Provide breed-specific advice when relevant
-- Base responses on current veterinary standards
-- Be clear about limitations and when professional vet care is needed
-- Keep responses clear, concise, and easy to understand
-- Maintain context from previous messages in the conversation
-- Ask clarifying questions when needed for better diagnosis
-
-Remember: You are not a replacement for professional veterinary care. Always advise seeking veterinary attention for serious or emergency situations.`;
 
   constructor(private configService: ConfigService) {
     const apiKey = this.configService.get<string>('GEMINI_API_KEY');
@@ -41,37 +22,74 @@ Remember: You are not a replacement for professional veterinary care. Always adv
     this.gemini = genAI.getGenerativeModel({
       model: this.configService.get<string>('GEMINI_AI_MODEL') || 'gemini-pro',
     });
-    
-    // Initialize chat with system prompt and configuration
-    this.initializeChat();
   }
 
-  private initializeChat() {
-    this.chat = this.gemini.startChat({
+  private generatePetContext(pet: Pet): string {
+    const medicalHistory = pet.medicalHistory
+      .sort((a, b) => b.date - a.date)
+      .map(record => `
+        Date: ${new Date(record.date).toLocaleDateString()}
+        Symptoms: ${record.symptoms}
+        Diagnosis: ${record.diagnosis}
+        Treatment: ${record.treatment}
+        ${record.notes ? `Notes: ${record.notes}` : ''}
+      `).join('\n---\n');
+
+    return `
+      Context about the pet:
+      Name: ${pet.name}
+      Species: ${pet.species}
+      Breed: ${pet.breed || 'Not specified'}
+      Age: ${pet.age} years
+      Weight: ${pet.weight} kg
+
+      Medical History:
+      ${medicalHistory || 'No medical history available'}
+
+      Please consider this information when providing advice. Keep responses focused on this specific pet's characteristics and history.
+    `;
+  }
+
+  async startNewChat(pet: Pet) {
+    const petContext = this.generatePetContext(pet);
+    const chat = this.gemini.startChat({
       history: [
         {
           role: 'user',
-          parts: [{ text: 'Please confirm your role as a veterinary assistant.' }],
+          parts: [{ text: 'Please confirm you understand the following context about the pet I am asking about.' }],
         },
         {
           role: 'model',
-          parts: [{ text: this.SYSTEM_PROMPT }],
+          parts: [{ text: 'I understand. Please provide the pet\'s information.' }],
+        },
+        {
+          role: 'user',
+          parts: [{ text: petContext }],
+        },
+        {
+          role: 'model',
+          parts: [{ text: `I understand the context about ${pet.name}. I'll consider their species, breed, age, weight, and medical history when providing advice. How can I help you with ${pet.name} today?` }],
         },
       ],
       generationConfig: {
         maxOutputTokens: 1000,
-        temperature: 0.7, // Balanced between creativity and consistency
-        topP: 0.8, // Nucleus sampling for more focused responses
-        topK: 40, // Limit vocabulary diversity for more precise medical terminology
+        temperature: 0.7,
+        topP: 0.8,
+        topK: 40,
       },
     });
+
+    return chat;
   }
 
-  async handleMessage(content: string): Promise<{ message: ChatResponse }> {
+  async handleMessage(content: string, pet?: Pet): Promise<{ message: ChatResponse }> {
     const startTime = Date.now();
     try {
+      // Create a new chat session with pet context if provided
+      const chat = pet ? await this.startNewChat(pet) : this.gemini.startChat();
+      
       // Send message and get response
-      const result = await this.chat.sendMessage(content);
+      const result = await chat.sendMessage(content);
       const response = await result.response;
 
       const endTime = Date.now();
@@ -87,14 +105,6 @@ Remember: You are not a replacement for professional veterinary care. Always adv
       return { message: aiMessage };
     } catch (error) {
       console.error('Error calling Gemini API:', error);
-      
-      // If there's an error with the chat session, try to reinitialize it
-      if (error.message?.includes('session')) {
-        console.log('Reinitializing chat session...');
-        this.initializeChat();
-        return this.handleMessage(content); // Retry the message
-      }
-      
       throw error;
     }
   }
