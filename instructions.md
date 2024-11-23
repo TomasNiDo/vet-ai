@@ -82,3 +82,45 @@
 ---
 
 ## Current File Structure
+.
+├── .gitignore
+├── instructions.md
+├── backend/
+│   ├── .eslintrc.js
+│   ├── .gitignore
+│   ├── .prettierrc
+│   ├── README.md
+│   ├── nest-cli.json
+│   ├── package.json
+│   ├── tsconfig.build.json
+│   ├── tsconfig.json
+│   ├── test/
+│   │   ├── jest-e2e.json
+│   │   └── app.e2e-spec.ts
+│   └── src/
+│       ├── main.ts
+│       ├── app.module.ts
+│       ├── app.controller.ts
+│       ├── app.service.ts
+│       └── app.controller.spec.ts
+└── frontend/
+    ├── .eslintrc.json
+    ├── .gitignore
+    ├── README.md
+    ├── components.json
+    ├── next.config.mjs
+    ├── package.json
+    ├── postcss.config.mjs
+    ├── tailwind.config.ts
+    ├── tsconfig.json
+    ├── app/
+    │   ├── globals.css
+    │   ├── layout.tsx
+    │   └── page.tsx
+    ├── components/
+    │   ├── navbar.tsx
+    │   ├── footer.tsx
+    │   └── ui/
+    │       └── button.tsx
+    └── lib/
+        └── utils.ts
