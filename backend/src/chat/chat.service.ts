@@ -29,10 +29,11 @@ Important guidelines:
 Remember: You are not a replacement for professional veterinary care. Always advise seeking veterinary attention for serious or emergency situations.`;
 
   constructor(private configService: ConfigService) {
-    this.apiKey = this.configService.get<string>('GEMINI_API_KEY');
-    if (!this.apiKey) {
+    const apiKey = this.configService.get<string>('GEMINI_API_KEY');
+    if (!apiKey) {
       throw new Error('GEMINI_API_KEY is not defined in environment variables');
     }
+    this.apiKey = apiKey;
   }
 
   onModuleInit() {

@@ -1,5 +1,5 @@
-import { AuthProvider } from '@/providers/auth-provider';
-import { Navbar } from '@/components/navbar';
+import { LayoutProvider } from '@/contexts/layout-context';
+import { ClientLayout } from '@/components/client-layout';
 import './globals.css';
 
 export default function RootLayout({
@@ -10,10 +10,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <AuthProvider>
-          <Navbar />
-          {children}
-        </AuthProvider>
+        <LayoutProvider>
+          <ClientLayout>{children}</ClientLayout>
+        </LayoutProvider>
       </body>
     </html>
   );

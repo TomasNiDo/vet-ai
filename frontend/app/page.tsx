@@ -1,11 +1,20 @@
 'use client'
 
+import { useEffect } from 'react';
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import { Clock, UserCheck, Zap, ArrowRight, Star } from 'lucide-react'
+import { useLayout } from '@/contexts/layout-context';
 
-export default function Home() {
+export default function HomePage() {
+  const { setIsNavbarFixed } = useLayout();
+
+  useEffect(() => {
+    setIsNavbarFixed(true);
+    return () => setIsNavbarFixed(false);
+  }, [setIsNavbarFixed]);
+
   return (
     <div className="min-h-screen">
       <HeroSection />

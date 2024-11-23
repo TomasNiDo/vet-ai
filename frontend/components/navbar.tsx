@@ -1,53 +1,48 @@
 'use client';
 
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Stethoscope } from 'lucide-react'
-import { useAuth } from '@/providers/auth-provider'
-import { auth } from '@/lib/firebase'
-import { signOut } from 'firebase/auth'
+import Link from 'next/link';
+import { useLayout } from '@/contexts/layout-context';
+import { Button } from './ui/button';
+import { getAuth, signOut } from 'firebase/auth';
 
 export function Navbar() {
-  const { user, loading } = useAuth()
+  const { isNavbarFixed } = useLayout();
+  const auth = getAuth();
 
   const handleSignOut = async () => {
     try {
-      await signOut(auth)
+      await signOut(auth);
     } catch (error) {
-      console.error('Error signing out:', error)
+      console.error('Error signing out:', error);
     }
-  }
+  };
 
   return (
-    <nav className="bg-transparent absolute top-0 left-0 right-0 z-10 p-4">
-      <div className="container mx-auto flex justify-between items-center">
-        <Link href="/" className="text-2xl font-bold text-primary flex items-center gap-2">
-          <Stethoscope className="h-6 w-6" />
-          VetAI
-        </Link>
-        <div className="space-x-4">
-          {!loading && (
-            user ? (
-              <>
-                <Button variant="outline" asChild>
-                  <Link href="/chat">Chat</Link>
-                </Button>
-                <Button onClick={handleSignOut}>Sign Out</Button>
-              </>
-            ) : (
-              <>
-                <Button variant="outline" asChild>
-                  <Link href="/register">Register</Link>
-                </Button>
-                <Button asChild>
-                  <Link href="/login">Sign In</Link>
-                </Button>
-              </>
-            )
-          )}
+    <nav className={`w-full ${
+      isNavbarFixed ? 'fixed top-0 z-50' : 'relative'
+    }`}>
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-16">
+          <Link href="/" className="text-xl font-bold">
+            Vet AI
+          </Link>
+          
+          <div className="flex items-center space-x-4">
+            <Link href="/chat">
+              <Button variant="ghost">Chat</Button>
+            </Link>
+            <Link href="/pets">
+              <Button variant="ghost">My Pets</Button>
+            </Link>
+            {auth.currentUser && (
+              <Button variant="outline" onClick={handleSignOut}>
+                Sign Out
+              </Button>
+            )}
+          </div>
         </div>
       </div>
     </nav>
-  )
+  );
 }
 

@@ -1,10 +1,17 @@
-export class ChatMessage {
+export interface ChatMessage {
+  id: string;
+  content: string;
+  role: 'user' | 'assistant';
+  timestamp: number;
+}
+
+export class SendMessageDto {
   message: string;
 }
 
-export class ChatResponse {
+export interface ChatResponse {
   id: string;
   content: string;
-  role: string;
+  role: 'user' | 'assistant';
   timestamp: number;
 }
