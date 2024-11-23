@@ -1,0 +1,56 @@
+# Node.js dependencies
+/node_modules
+/backend/node_modules
+/frontend/node_modules
+
+# Build outputs
+/dist
+/backend/dist
+/frontend/dist
+
+# Logs
+*.log
+/backend/*.log
+/frontend/*.log
+logs
+/backend/logs
+/frontend/logs
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+/backend/.env
+/frontend/.env
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE-specific files
+.vscode/
+.idea/
+*.swp
+
+# Temporary files
+/tmp
+/backend/tmp
+/frontend/tmp
+*.tmp
+*.bak
+
+# Test coverage
+/coverage
+/backend/coverage
+/frontend/coverage
+
+# Firebase-specific
+.firebase/
+.firebase.json
+firebaserc
+
+# Other package managers
+.pnpm-debug.log
+yarn.lock
