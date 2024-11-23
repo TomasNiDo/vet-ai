@@ -50,6 +50,7 @@ Thumbs.db
 .firebase/
 .firebase.json
 firebaserc
+backend/src/config/firebase.json
 
 # Other package managers
 .pnpm-debug.log
