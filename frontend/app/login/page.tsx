@@ -17,7 +17,7 @@ export default function LoginPage() {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      router.push('/chat');
+      router.push('/pets');
     } catch (err) {
       setError('Failed to sign in. Please check your credentials.');
     }

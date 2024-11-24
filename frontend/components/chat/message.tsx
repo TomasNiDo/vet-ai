@@ -40,22 +40,8 @@ export function Message({ message }: { message: ChatMessage }) {
               ul: ({ children }) => <ul className="list-disc ml-4 mb-2">{children}</ul>,
               ol: ({ children }) => <ol className="list-decimal ml-4 mb-2">{children}</ol>,
               li: ({ children }) => <li className="mb-1">{children}</li>,
-              code: ({ children }) => (
-                <code className={`
-                  px-1.5 py-0.5 rounded font-mono text-sm
-                  ${isAi ? 'bg-gray-200 text-gray-800' : 'bg-blue-400 text-white'}
-                `}>
-                  {children}
-                </code>
-              ),
-              pre: ({ children }) => (
-                <pre className={`
-                  p-3 rounded-lg overflow-x-auto font-mono text-sm
-                  ${isAi ? 'bg-gray-800 text-gray-100' : 'bg-blue-600 text-white'}
-                `}>
-                  {children}
-                </pre>
-              ),
+              code: ({ children }) => <span>{children}</span>,
+              pre: ({ children }) => <span>{children}</span>,
             }}
           >
             {message.content}

@@ -9,14 +9,15 @@ import { Message } from '@/components/chat/message';
 import { AuthWrapper } from '@/components/auth/auth-wrapper';
 import { getAuth } from 'firebase/auth';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Bot } from 'lucide-react';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+import { ArrowLeft, Bot, AlertCircle } from 'lucide-react';
+import axios from '@/lib/axios';
+import { isAxiosError } from 'axios';
 
 function ChatPage() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [pet, setPet] = useState<Pet | null>(null);
   const [isAiResponding, setIsAiResponding] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const searchParams = useSearchParams();
   const router = useRouter();
   const auth = getAuth();
@@ -24,34 +25,66 @@ function ChatPage() {
   const petId = searchParams.get('petId');
 
   useEffect(() => {
-    const fetchPet = async () => {
-      if (!petId) return;
+    const initializeChat = async () => {
+      if (!auth.currentUser) return;
 
       try {
-        const token = await auth.currentUser?.getIdToken();
-        const response = await fetch(`${API_URL}/api/pets/${petId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+        if (petId) {
+          // Fetch pet data first
+          const { data: petData } = await axios.get(`/api/pets/${petId}`);
+          setPet(petData);
+        }
+
+        // Get AI greeting
+        setIsAiResponding(true);
+        setError(null);
+        const { data } = await axios.post('/api/chat', {
+          message: '',
+          petId: petId || undefined,
+          ownerId: auth.currentUser.uid,
         });
-        
-        if (!response.ok) throw new Error('Failed to fetch pet');
-        
-        const data = await response.json();
-        setPet(data);
+
+        setMessages([{
+          id: data.message.id,
+          content: data.message.content,
+          role: 'assistant',
+          timestamp: data.message.timestamp,
+        }]);
       } catch (error) {
-        console.error('Error fetching pet:', error);
-        router.push('/pets');
+        if (petId) {
+          console.error('Error fetching pet:', error);
+          router.push('/pets');
+        } else {
+          handleError(error);
+        }
+      } finally {
+        setIsAiResponding(false);
       }
     };
 
-    if (auth.currentUser) {
-      fetchPet();
-    }
+    initializeChat();
   }, [auth.currentUser, petId, router]);
 
+  const handleError = (error: unknown) => {
+    if (isAxiosError(error)) {
+      if (error.response?.status === 429) {
+        setError("I'm currently handling too many requests. Please wait a moment and try again.");
+      } else {
+        setError("Something went wrong. Please try again later.");
+      }
+    } else {
+      setError("An unexpected error occurred. Please try again.");
+    }
+    
+    // Clear error after 5 seconds
+    setTimeout(() => setError(null), 5000);
+  };
+
   const sendMessage = async (content: string) => {
+    if (!content.trim()) return;
+
     try {
+      setError(null);
       const userMessage: ChatMessage = {
         id: Date.now().toString(),
         content,
@@ -61,28 +94,15 @@ function ChatPage() {
       setMessages(prev => [...prev, userMessage]);
       setIsAiResponding(true);
 
-      const token = await auth.currentUser?.getIdToken();
-      const response = await fetch(`${API_URL}/api/chat`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({ 
-          message: content,
-          petId: petId || undefined,
-          ownerId: auth.currentUser?.uid,
-        }),
+      const { data } = await axios.post('/api/chat', {
+        message: content,
+        petId: petId || undefined,
+        ownerId: auth.currentUser?.uid,
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to send message');
-      }
-
-      const data = await response.json();
       setMessages(prev => [...prev, data.message]);
     } catch (error) {
-      console.error('Error sending message:', error);
+      handleError(error);
     } finally {
       setIsAiResponding(false);
     }
@@ -111,6 +131,15 @@ function ChatPage() {
             )}
           </div>
         </div>
+
+        {error && (
+          <div className="p-4 bg-red-50 border-b border-red-100">
+            <div className="flex items-center gap-2 text-red-700">
+              <AlertCircle className="h-5 w-5" />
+              <p>{error}</p>
+            </div>
+          </div>
+        )}
 
         <div className="flex-1 overflow-y-auto p-4 space-y-6">
           {messages.length === 0 ? (
@@ -158,7 +187,7 @@ function ChatPage() {
         </div>
 
         <div className="border-t bg-white">
-          <ChatInput onSendMessage={sendMessage} />
+          <ChatInput onSendMessage={sendMessage} disabled={!!error || isAiResponding} />
         </div>
       </div>
     </div>

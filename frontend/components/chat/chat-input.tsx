@@ -5,9 +5,10 @@ import { SendIcon } from 'lucide-react';
 
 interface ChatInputProps {
   onSendMessage: (message: string) => Promise<void>;
+  disabled?: boolean;
 }
 
-export function ChatInput({ onSendMessage }: ChatInputProps) {
+export function ChatInput({ onSendMessage, disabled }: ChatInputProps) {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -22,7 +23,7 @@ export function ChatInput({ onSendMessage }: ChatInputProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim() || isLoading) return;
+    if (!input.trim() || isLoading || disabled) return;
 
     try {
       setIsLoading(true);
@@ -47,13 +48,13 @@ export function ChatInput({ onSendMessage }: ChatInputProps) {
             ref={textareaRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Type your message..."
+            placeholder={disabled ? "Please wait a moment..." : "Type your message..."}
             className="min-h-[50px] max-h-[200px] pr-[5.5rem] resize-none py-3 px-4 rounded-full"
-            disabled={isLoading}
+            disabled={disabled}
             onKeyDown={(e) => {
               if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
-                if (input.trim()) {
+                if (input.trim() && !disabled) {
                   handleSubmit(e);
                 }
               }
@@ -62,7 +63,7 @@ export function ChatInput({ onSendMessage }: ChatInputProps) {
           <Button 
             type="submit" 
             size="icon"
-            disabled={isLoading || !input.trim()}
+            disabled={isLoading || !input.trim() || disabled}
             className="absolute right-2 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full"
           >
             {isLoading ? (

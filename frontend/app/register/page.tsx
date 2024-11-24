@@ -7,6 +7,7 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { FirebaseError } from 'firebase/app';
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
@@ -37,12 +38,14 @@ export default function RegisterPage() {
 
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      router.push('/chat');
-    } catch (error: any) {
-      if (error.code === 'auth/email-already-in-use') {
-        setError('Email is already registered');
-      } else {
-        setError('Failed to create account. Please try again.');
+      router.push('/pets');
+    } catch (error: unknown) {
+      if (error instanceof FirebaseError) {
+        if (error.code === 'auth/email-already-in-use') {
+          setError('Email is already registered');
+        } else {
+          setError('Failed to create account. Please try again.');
+        }
       }
     }
   };
@@ -51,7 +54,7 @@ export default function RegisterPage() {
     <div className="flex min-h-screen items-center justify-center">
       <div className="w-full max-w-md space-y-8 p-8">
         <div className="text-center">
-          <h1 className="text-2xl font-bold">Create your Vet AI Account</h1>
+          <h1 className="text-2xl font-bold">Create your FurSure Account</h1>
           <p className="mt-2 text-gray-600">Start getting AI-powered pet care advice</p>
         </div>
         

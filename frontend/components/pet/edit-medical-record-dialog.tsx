@@ -4,28 +4,30 @@ import { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Pet } from '@/types/pet';
+import { Pet, MedicalRecord } from '@/types/pet';
 import axios from '@/lib/axios';
 
-interface AddMedicalRecordDialogProps {
+interface EditMedicalRecordDialogProps {
   pet: Pet;
+  record: MedicalRecord;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onAdd: () => void;
+  onUpdate: () => void;
 }
 
-export function AddMedicalRecordDialog({
+export function EditMedicalRecordDialog({
   pet,
+  record,
   open,
   onOpenChange,
-  onAdd,
-}: AddMedicalRecordDialogProps) {
+  onUpdate,
+}: EditMedicalRecordDialogProps) {
   const [formData, setFormData] = useState({
-    symptoms: '',
-    diagnosis: '',
-    treatment: '',
-    notes: '',
-    date: new Date().toISOString().split('T')[0],
+    symptoms: record.symptoms,
+    diagnosis: record.diagnosis,
+    treatment: record.treatment,
+    notes: record.notes || '',
+    date: new Date(record.date).toISOString().split('T')[0],
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -34,15 +36,15 @@ export function AddMedicalRecordDialog({
     setIsLoading(true);
 
     try {
-      await axios.post(`/api/pets/${pet.id}/medical-records`, {
+      await axios.put(`/api/pets/${pet.id}/medical-records/${record.id}`, {
         ...formData,
         date: new Date(formData.date).getTime(),
       });
 
-      onAdd();
+      onUpdate();
       onOpenChange(false);
     } catch (error) {
-      console.error('Error adding medical record:', error);
+      console.error('Error updating medical record:', error);
     } finally {
       setIsLoading(false);
     }
@@ -52,7 +54,7 @@ export function AddMedicalRecordDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add Medical Record for {pet.name}</DialogTitle>
+          <DialogTitle>Edit Medical Record for {pet.name}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
@@ -113,7 +115,7 @@ export function AddMedicalRecordDialog({
               Cancel
             </Button>
             <Button type="submit" disabled={isLoading}>
-              {isLoading ? 'Adding...' : 'Add Record'}
+              {isLoading ? 'Saving...' : 'Save Changes'}
             </Button>
           </div>
         </form>

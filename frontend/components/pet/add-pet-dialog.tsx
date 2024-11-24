@@ -5,10 +5,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectItem } from '@/components/ui/select';
-import { getAuth } from 'firebase/auth';
 import { Pet } from '@/types/pet';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+import axios from '@/lib/axios';
 
 interface AddPetDialogProps {
   open: boolean;
@@ -28,7 +26,6 @@ export function AddPetDialog({ open, onOpenChange, onAdd }: AddPetDialogProps) {
   const [formData, setFormData] = useState(initialFormData);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Reset form when dialog closes
   useEffect(() => {
     if (!open) {
       setFormData(initialFormData);
@@ -40,24 +37,13 @@ export function AddPetDialog({ open, onOpenChange, onAdd }: AddPetDialogProps) {
     setIsLoading(true);
 
     try {
-      const token = await getAuth().currentUser?.getIdToken();
-      const response = await fetch(`${API_URL}/api/pets`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          ...formData,
-          age: Number(formData.age),
-          weight: Number(formData.weight),
-        }),
+      const { data } = await axios.post('/api/pets', {
+        ...formData,
+        age: Number(formData.age),
+        weight: Number(formData.weight),
       });
 
-      if (!response.ok) throw new Error('Failed to create pet');
-
-      const pet = await response.json();
-      onAdd(pet);
+      onAdd(data);
       onOpenChange(false);
     } catch (error) {
       console.error('Error creating pet:', error);

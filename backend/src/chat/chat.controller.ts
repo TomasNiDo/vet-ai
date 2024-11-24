@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Request } from '@nestjs/common';
 import { FirebaseAuthGuard } from '../firebase/guards/firebase-auth.guard';
 import { ChatService } from './chat.service';
 import { SendMessageDto } from './dto/chat.dto';
@@ -13,11 +13,11 @@ export class ChatController {
   ) {}
 
   @Post()
-  async sendMessage(@Body() dto: SendMessageDto) {
+  async sendMessage(@Request() req, @Body() dto: SendMessageDto) {
     let pet;
     if (dto.petId) {
       pet = await this.petService.getPet(dto.petId, dto.ownerId);
     }
-    return this.chatService.handleMessage(dto.message, pet);
+    return this.chatService.handleMessage(dto.message, pet, req.user.uid);
   }
 } 

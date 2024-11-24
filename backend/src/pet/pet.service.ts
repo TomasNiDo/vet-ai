@@ -150,4 +150,43 @@ export class PetService {
       throw new InternalServerErrorException('Failed to delete pet');
     }
   }
+
+  async updateMedicalRecord(
+    petId: string,
+    recordId: string,
+    ownerId: string,
+    dto: AddMedicalRecordDto,
+  ) {
+    try {
+      const pet = await this.getPet(petId, ownerId);
+      if (!pet) {
+        throw new NotFoundException('Pet not found');
+      }
+
+      const recordIndex = pet.medicalHistory.findIndex(r => r.id === recordId);
+      if (recordIndex === -1) {
+        throw new NotFoundException('Medical record not found');
+      }
+
+      const updatedRecord = {
+        ...pet.medicalHistory[recordIndex],
+        ...dto,
+      };
+
+      const medicalHistory = [...pet.medicalHistory];
+      medicalHistory[recordIndex] = updatedRecord;
+
+      await this.petsRef.child(petId).update({
+        medicalHistory,
+        updatedAt: Date.now(),
+      });
+
+      return updatedRecord;
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Failed to update medical record');
+    }
+  }
 } 

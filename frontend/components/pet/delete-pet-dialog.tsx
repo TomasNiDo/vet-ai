@@ -1,10 +1,10 @@
+'use client';
+
 import { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { getAuth } from 'firebase/auth';
 import { Pet } from '@/types/pet';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+import axios from '@/lib/axios';
 
 interface DeletePetDialogProps {
   pet: Pet;
@@ -20,16 +20,7 @@ export function DeletePetDialog({ pet, open, onOpenChange, onDelete }: DeletePet
     setIsLoading(true);
 
     try {
-      const token = await getAuth().currentUser?.getIdToken();
-      const response = await fetch(`${API_URL}/api/pets/${pet.id}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) throw new Error('Failed to delete pet');
-
+      await axios.delete(`/api/pets/${pet.id}`);
       onDelete();
       onOpenChange(false);
     } catch (error) {
@@ -43,12 +34,12 @@ export function DeletePetDialog({ pet, open, onOpenChange, onDelete }: DeletePet
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Delete Pet</DialogTitle>
-          <DialogDescription>
+          <DialogTitle>Delete {pet.name}</DialogTitle>
+          <DialogDescription className="mt-4">
             Are you sure you want to delete {pet.name}? This action cannot be undone.
           </DialogDescription>
         </DialogHeader>
-        <div className="flex justify-end space-x-2">
+        <div className="flex justify-end space-x-2 mt-6">
           <Button
             type="button"
             variant="ghost"

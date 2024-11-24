@@ -122,4 +122,26 @@ export class PetController {
       );
     }
   }
+
+  @Put(':id/medical-records/:recordId')
+  async updateMedicalRecord(
+    @Request() req,
+    @Param('id') id: string,
+    @Param('recordId') recordId: string,
+    @Body() dto: AddMedicalRecordDto,
+  ) {
+    try {
+      return await this.petService.updateMedicalRecord(id, recordId, req.user.uid, dto);
+    } catch (error) {
+      console.error('Controller error - Update medical record:', error);
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: 'Failed to update medical record',
+          details: error.message,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 }
