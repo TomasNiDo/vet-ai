@@ -1,168 +1,247 @@
-'use client'
+'use client';
 
-import { useEffect } from 'react';
-import { motion } from 'framer-motion'
-import { Button } from '@/components/ui/button'
-import Image from 'next/image'
-import { Clock, UserCheck, Zap, ArrowRight, Star } from 'lucide-react'
-import { useLayout } from '@/contexts/layout-context';
-import vet from '@/assets/images/vet.jpg';
-import Link from 'next/link';
+import { Button } from "@/components/ui/button"
+import { ChatBubble } from "@/components/chat-bubble"
+import { VetCard } from "@/components/vet-card"
+import { TestimonialCard } from "@/components/testimonial-card"
+import { ArrowRight, MessageCircle, Smartphone, Brain, Stethoscope } from 'lucide-react'
+import Image from "next/image"
+import { motion } from "framer-motion"
+import Link from "next/link"
+import { Bot } from 'lucide-react';
+import vetImage from "@/assets/images/vet.jpg"
+import vetImage2 from "@/assets/images/vet-2.jpg"
+import vetImage3 from "@/assets/images/vet-3.jpg"
+import testimonialImage1 from "@/assets/images/testimonial-1.jpg"
+import testimonialImage2 from "@/assets/images/testimonial-2.jpg"
+import testimonialImage3 from "@/assets/images/testimonial-3.jpg"
+import test from "node:test";
 
-export default function HomePage() {
-  const { setIsNavbarFixed } = useLayout();
-
-  useEffect(() => {
-    setIsNavbarFixed(true);
-    return () => setIsNavbarFixed(false);
-  }, [setIsNavbarFixed]);
-
+export default function Home() {
   return (
-    <div className="min-h-screen">
+    <main className="min-h-screen pt-16">
       <HeroSection />
-      <FeaturesSection />
-      <TestimonialsSection />
-      <CtaSection />
-    </div>
+      <HowItWorksSection />
+      <TestimonialSection />
+    </main>
   )
 }
 
 function HeroSection() {
   return (
-    <section className="pt-32 pb-20 bg-gradient-to-b from-blue-50 to-white">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-900">
-              Your AI Veterinary Assistant
-            </h1>
-            <p className="text-xl mb-8 text-gray-600">
-              Get instant answers to your pet health questions
-            </p>
-            <div className="space-x-4">
-              <Link href="/login">
-                <Button size="lg" className="bg-primary hover:bg-primary/90 text-white">Get Started</Button>
-              </Link>
-              
-              <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary/10">
-                Learn More
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </div>
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <Image
-              src={vet}
-              alt="Happy pets"
-              width={400}
-              className="rounded-lg shadow-lg"
-            />
-          </motion.div>
-        </div>
-      </div>
-    </section>
-  )
-}
-
-function FeaturesSection() {
-  const features = [
-    { icon: Clock, title: '24/7 Availability', description: 'Get answers anytime, anywhere' },
-    { icon: UserCheck, title: 'Personalized Advice', description: 'Tailored recommendations for your pet' },
-    { icon: Zap, title: 'Quick Diagnosis', description: 'Identify potential issues fast' },
-  ]
-
-  return (
-    <section className="py-20 bg-white">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-bold mb-12 text-center text-gray-900">Why Choose FurSure?</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {features.map((feature, index) => (
+    <section className="relative overflow-hidden">
+      <div className="absolute inset-0 paw-pattern opacity-5"></div>
+      <div className="container mx-auto px-4 relative">
+        <div className="grid lg:grid-cols-2 gap-12 items-center py-20">
+          {/* Left Column */}
+          <div className="relative z-10">
             <motion.div 
-              key={index} 
-              className="bg-white p-6 rounded-lg shadow-md border border-gray-100"
+              className="mb-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              transition={{ duration: 0.5 }}
             >
-              <feature.icon className="h-12 w-12 text-primary mb-4" />
-              <h3 className="text-xl font-semibold mb-2 text-gray-900">{feature.title}</h3>
-              <p className="text-gray-600">{feature.description}</p>
+              <h1 className="text-5xl lg:text-6xl font-bold">
+                <span className="gradient-text">AI-Powered</span><br />
+                <span className="gradient-text">Pet Health</span><br />
+                Assistant
+              </h1>
             </motion.div>
-          ))}
+            <motion.p 
+              className="text-lg text-muted-foreground mb-8 max-w-md"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              Get instant answers to your pet's health and wellness questions from our AI veterinarian, anytime, anywhere.
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+            >
+              <Link href="/chat">
+                <Button size="lg" className="rounded-full bg-primary text-white hover:bg-primary/90">
+                  Ask FurSure AI
+                  <MessageCircle className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            </motion.div>
+
+            <div className="mt-12 space-y-4">
+              <ChatBubble 
+                message="Hello! What questions do you have about your pet's health today? 🐾"
+                timestamp="10:57 AM"
+                className="ml-8"
+              />
+              <ChatBubble 
+                message="Hi FurSure AI, my cat has been drinking more water than usual. Should I be concerned?"
+                timestamp="11:34 AM"
+                avatar={testimonialImage3.src}
+              />
+              <ChatBubble 
+                message="Increased thirst in cats can be a sign of various health issues. It's important to monitor this change. Here are some possible reasons and next steps..."
+                timestamp="11:35 AM"
+                className="ml-8"
+              />
+            </div>
+          </div>
+
+          {/* Right Column */}
+          <div className="relative">
+            <div className="absolute top-0 right-0 w-[200%] h-full bg-gray-100 rounded-l-[3rem] -z-10 translate-x-1/4" />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              <Image
+                src={vetImage2} 
+                alt="Pet owner using FurSure AI app"
+                width={600}
+                height={700}
+                className="rounded-2xl mx-auto shadow-lg"
+                priority
+              />
+            </motion.div>
+            <VetCard
+              name="FurSure AI"
+              image={vetImage3.src}
+              className="absolute bottom-12 right-12"
+            />
+            <motion.div
+              className="absolute -top-4 -left-4"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <Image
+                src={vetImage}
+                alt="AI analyzing pet health data"
+                width={120}
+                height={120}
+                className="rounded-xl shadow-md"
+              />
+            </motion.div>
+          </div>
         </div>
       </div>
     </section>
   )
 }
 
-function TestimonialsSection() {
-  const testimonials = [
-    { name: 'John D.', text: 'FurSure saved me a trip to the vet. Highly recommended!' },
-    { name: 'Sarah M.', text: 'I love how quickly I can get answers about my cat\'s health.' },
+function HowItWorksSection() {
+  const steps = [
+    {
+      icon: Smartphone,
+      title: "Ask a Question",
+      description: "Open the FurSure AI app and type in your pet health question."
+    },
+    {
+      icon: Brain,
+      title: "AI Analysis",
+      description: "Our advanced AI processes your question and analyzes it against a vast database of veterinary knowledge."
+    },
+    {
+      icon: Stethoscope,
+      title: "Get Expert Advice",
+      description: "Receive personalized, vet-approved advice and recommendations for your pet's health concern."
+    }
   ]
 
   return (
-    <section className="py-20 bg-gray-50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-bold mb-12 text-center text-gray-900">What Our Users Say</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {testimonials.map((testimonial, index) => (
-            <motion.div 
-              key={index} 
-              className="bg-white p-6 rounded-lg shadow-md border border-gray-200"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: index * 0.2 }}
-            >
-              <Star className="h-8 w-8 text-yellow-400 mb-4" />
-              <p className="text-gray-600 mb-4">&quot;{testimonial.text}&quot;</p>
-              <p className="font-semibold text-gray-900">- {testimonial.name}</p>
-            </motion.div>
-          ))}
+    <section className="py-20 bg-gradient-to-b from-background to-accent/10">
+      <div className="container mx-auto px-4">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl font-bold mb-12">
+            How <span className="gradient-text">FurSure AI</span> Works
+          </h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {steps.map((step, index) => (
+              <motion.div
+                key={index}
+                className="flex flex-col items-center"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.2 }}
+              >
+                <div className="bg-primary/10 p-4 rounded-full mb-4">
+                  <step.icon className="h-8 w-8 text-primary" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
+                <p className="text-muted-foreground">{step.description}</p>
+              </motion.div>
+            ))}
+          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.8 }}
+          >
+            <Button size="lg" className="mt-12 rounded-full bg-primary text-white hover:bg-primary/90">
+              Try FurSure AI Now
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </motion.div>
         </div>
       </div>
     </section>
   )
 }
 
-function CtaSection() {
+function TestimonialSection() {
+  const testimonials = [
+    {
+      name: "Sarah L.",
+      avatar: testimonialImage1.src,
+      rating: 5,
+      testimonial: "FurSure AI helped me understand my dog's symptoms quickly. It's like having a vet on call 24/7!"
+    },
+    {
+      name: "Mike R.",
+      avatar: testimonialImage2.src,
+      rating: 5,
+      testimonial: "I was skeptical at first, but FurSure AI's advice for my cat's diet was spot on. Highly recommended!"
+    },
+    {
+      name: "Emily T.",
+      avatar: testimonialImage3.src,
+      rating: 4,
+      testimonial: "The app is so easy to use, and the AI gives clear, actionable advice. It's been a game-changer for my pet's health."
+    }
+  ]
+
   return (
-    <section className="py-20 bg-primary text-white">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <motion.h2 
-          className="text-3xl font-bold mb-6"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          Ready to Get Started?
-        </motion.h2>
-        <motion.p 
-          className="text-xl mb-8"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          Join thousands of pet owners who trust FurSure
-        </motion.p>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-        >
-          <Button size="lg" variant="secondary" className="bg-white text-primary hover:bg-yellow-50">
-            Sign Up Now
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-        </motion.div>
+    <section className="py-20 bg-gradient-to-b from-accent/10 to-background">
+      <div className="container mx-auto px-4">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-4xl font-bold mb-12 text-center">
+            What Pet Parents Are Saying About <span className="gradient-text">FurSure AI</span>
+          </h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.2 }}
+              >
+                <TestimonialCard {...testimonial} />
+              </motion.div>
+            ))}
+          </div>
+          <motion.div
+            className="text-center mt-12"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.8 }}
+          >
+            <Button size="lg" className="rounded-full bg-primary text-white hover:bg-primary/90">
+              Join Happy Pet Parents
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </motion.div>
+        </div>
       </div>
     </section>
   )
