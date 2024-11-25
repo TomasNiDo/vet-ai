@@ -21,41 +21,38 @@ export function Navbar() {
   };
 
   return (
-    <nav className={`w-full ${
-      isNavbarFixed ? 'bg-blue-50 fixed top-0 z-50' : 'relative'
-    }`}>
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          <Link href="/" className="flex items-center text-xl font-bold">
-            <PawPrint className="inline-block mr-2" size={24} /> FurSure
-          </Link>
-          
-          <div className="flex items-center space-x-4">
-            {loading ? (
-              <div className="animate-pulse h-10 w-20 bg-gray-200 rounded" />
-            ) : user ? (
-              <>
-                <Link href="/chat">
-                  <Button variant="ghost">Chat</Button>
-                </Link>
-                <Link href="/pets">
-                  <Button variant="ghost">My Pets</Button>
-                </Link>
-                <Button variant="outline" onClick={handleSignOut}>
-                  Sign Out
-                </Button>
-              </>
-            ) : (
-              <>
-                <Link href="/login">
-                  <Button variant="ghost">Login</Button>
-                </Link>
-                <Link href="/register">
-                  <Button variant="default">Register</Button>
-                </Link>
-              </>
-            )}
+    <nav className={`${isNavbarFixed ? 'fixed' : 'relative'} w-full top-0 z-50 bg-background/80 backdrop-blur-sm`}>
+      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+        <Link href="/" className="flex items-center space-x-2">
+          <div className="bg-primary p-1.5 rounded">
+            <PawPrint className="h-5 w-5 text-white" />
           </div>
+          <span className="text-xl font-bold text-primary">FurSure AI</span>
+        </Link>
+
+        <div className="flex items-center space-x-4">
+          {user ? (
+            <>
+              <Link href="/chat">
+                <Button variant="ghost">Chat</Button>
+              </Link>
+              <Link href="/pets">
+                <Button variant="ghost">My Pets</Button>
+              </Link>
+              <Button variant="outline" onClick={handleSignOut}>
+                Sign Out
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button variant="ghost">
+                <Link href="/login">Login</Link>
+              </Button>
+              <Button className="bg-primary text-white hover:bg-primary/90">
+                <Link href="/signup">Try FurSure AI</Link>
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </nav>
