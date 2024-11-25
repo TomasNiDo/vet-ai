@@ -30,12 +30,10 @@ function ChatPage() {
 
       try {
         if (petId) {
-          // Fetch pet data first
           const { data: petData } = await axios.get(`/api/pets/${petId}`);
           setPet(petData);
         }
 
-        // Get AI greeting
         setIsAiResponding(true);
         setError(null);
         const { data } = await axios.post('/api/chat', {
@@ -76,7 +74,6 @@ function ChatPage() {
       setError("An unexpected error occurred. Please try again.");
     }
     
-    // Clear error after 5 seconds
     setTimeout(() => setError(null), 5000);
   };
 
@@ -109,23 +106,23 @@ function ChatPage() {
   };
 
   return (
-    <div className="flex justify-center min-h-screen bg-gray-50 py-6">
-      <div className="w-full max-w-4xl bg-white shadow-xl flex flex-col h-[calc(100vh-3rem)] mx-4">
-        <div className="p-4 border-b bg-white sticky top-0 z-10 flex items-center gap-4">
+    <div className="flex justify-center min-h-screen bg-background py-6">
+      <div className="w-full max-w-4xl bg-card shadow-xl flex flex-col h-[calc(100vh-3rem)] mx-4 rounded-xl border border-border">
+        <div className="p-4 border-b border-border bg-card sticky top-0 z-10 flex items-center gap-4">
           <Button
             variant="ghost"
             size="icon"
             onClick={() => router.push(petId ? '/pets' : '/')}
-            className="hover:bg-gray-100"
+            className="hover:bg-secondary/10"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-4 w-4 text-primary" />
           </Button>
           <div>
-            <h2 className="font-semibold text-lg">
+            <h2 className="font-semibold text-lg text-foreground">
               {petId ? (pet ? `Chat about ${pet.name}` : 'Loading...') : 'General Pet Health Chat'}
             </h2>
             {pet && (
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-muted-foreground">
                 {pet.species} • {pet.age} years old • {pet.weight} kg
               </p>
             )}
@@ -133,8 +130,8 @@ function ChatPage() {
         </div>
 
         {error && (
-          <div className="p-4 bg-red-50 border-b border-red-100">
-            <div className="flex items-center gap-2 text-red-700">
+          <div className="p-4 bg-destructive/10 border-b border-destructive/20">
+            <div className="flex items-center gap-2 text-destructive">
               <AlertCircle className="h-5 w-5" />
               <p>{error}</p>
             </div>
@@ -144,16 +141,16 @@ function ChatPage() {
         <div className="flex-1 overflow-y-auto p-4 space-y-6">
           {messages.length === 0 ? (
             <div className="h-full flex items-center justify-center">
-              <div className="text-center space-y-3 max-w-sm mx-auto p-6 rounded-lg bg-gray-50">
-                <Bot className="w-12 h-12 mx-auto text-gray-400" />
-                <h3 className="font-medium text-gray-900">
+              <div className="text-center space-y-3 max-w-sm mx-auto p-6 rounded-lg bg-secondary/5">
+                <Bot className="w-12 h-12 mx-auto text-secondary" />
+                <h3 className="font-medium text-foreground">
                   {petId ? (
                     pet ? `Ask anything about ${pet.name}'s health and well-being` : 'Loading...'
                   ) : (
-                    'Welcome to Vet AI Assistant'
+                    'Welcome to FurSure AI Assistant'
                   )}
                 </h3>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-muted-foreground">
                   {petId ? (
                     pet ? `I'll consider ${pet.name}'s profile and medical history in my responses` : ''
                   ) : (
@@ -169,15 +166,15 @@ function ChatPage() {
           )}
           {isAiResponding && (
             <div className="flex items-center gap-3">
-              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100">
-                <Bot className="w-5 h-5 text-blue-500" />
+              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-secondary/20">
+                <Bot className="w-5 h-5 text-secondary" />
               </div>
-              <div className="bg-gray-100 rounded-2xl px-4 py-2 text-sm text-gray-500">
+              <div className="bg-secondary/5 rounded-2xl px-4 py-2 text-sm text-muted-foreground">
                 <div className="flex items-center gap-2">
                   <div className="flex gap-1">
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                    <div className="w-2 h-2 bg-secondary rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                    <div className="w-2 h-2 bg-secondary rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                    <div className="w-2 h-2 bg-secondary rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
                   </div>
                   <span>Thinking...</span>
                 </div>
@@ -186,7 +183,7 @@ function ChatPage() {
           )}
         </div>
 
-        <div className="border-t bg-white">
+        <div className="border-t border-border bg-card">
           <ChatInput onSendMessage={sendMessage} disabled={!!error || isAiResponding} />
         </div>
       </div>

@@ -25,7 +25,6 @@ export function PetCard({ pet, onUpdate }: PetCardProps) {
   const [isMedicalHistoryOpen, setIsMedicalHistoryOpen] = useState(false)
 
   const getInitials = (name: string) => name.slice(0, 2).toUpperCase()
-  const getAvatarUrl = (species: string) => `/images/${species.toLowerCase()}.png`
 
   const handleStartChat = () => {
     router.push(`/chat?petId=${pet.id}`);
@@ -34,27 +33,29 @@ export function PetCard({ pet, onUpdate }: PetCardProps) {
   return (
     <>
       <Card className="overflow-hidden transition-all hover:shadow-md">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-gradient-to-r from-blue-100 to-purple-100">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-secondary/10">
           <div className="flex items-center space-x-4">
-            <Avatar className="h-12 w-12 border-2 border-white">
-              <AvatarFallback>{getInitials(pet.name)}</AvatarFallback>
+            <Avatar className="h-12 w-12 border-2 border-background">
+              <AvatarFallback className="bg-primary text-primary-foreground">
+                {getInitials(pet.name)}
+              </AvatarFallback>
             </Avatar>
             <div>
-              <CardTitle className="text-xl font-bold">{pet.name}</CardTitle>
+              <CardTitle className="text-xl font-bold text-foreground">{pet.name}</CardTitle>
               <Badge variant="secondary" className="mt-1">
                 {pet.species}
               </Badge>
             </div>
           </div>
           <div className="flex -space-x-1">
-            <Tooltip content="Start Chat About This Pet">
+            <Tooltip content="Chat About Pet">
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={handleStartChat}
-                className="hover:bg-green-200"
+                className="hover:bg-secondary/20"
               >
-                <MessageCircle className="h-4 w-4" />
+                <MessageCircle className="h-4 w-4 text-secondary" />
               </Button>
             </Tooltip>
 
@@ -63,9 +64,9 @@ export function PetCard({ pet, onUpdate }: PetCardProps) {
                 variant="ghost"
                 size="icon"
                 onClick={() => setIsMedicalHistoryOpen(true)}
-                className="hover:bg-blue-200"
+                className="hover:bg-secondary/20"
               >
-                <ClipboardList className="h-4 w-4" />
+                <ClipboardList className="h-4 w-4 text-secondary" />
               </Button>
             </Tooltip>
 
@@ -74,9 +75,9 @@ export function PetCard({ pet, onUpdate }: PetCardProps) {
                 variant="ghost"
                 size="icon"
                 onClick={() => setIsAddMedicalRecordOpen(true)}
-                className="hover:bg-green-200"
+                className="hover:bg-secondary/20"
               >
-                <PlusCircle className="h-4 w-4" />
+                <PlusCircle className="h-4 w-4 text-secondary" />
               </Button>
             </Tooltip>
 
@@ -85,9 +86,9 @@ export function PetCard({ pet, onUpdate }: PetCardProps) {
                 variant="ghost"
                 size="icon"
                 onClick={() => setIsEditOpen(true)}
-                className="hover:bg-blue-200"
+                className="hover:bg-secondary/20"
               >
-                <PencilIcon className="h-4 w-4" />
+                <PencilIcon className="h-4 w-4 text-secondary" />
               </Button>
             </Tooltip>
 
@@ -96,7 +97,7 @@ export function PetCard({ pet, onUpdate }: PetCardProps) {
                 variant="ghost"
                 size="icon"
                 onClick={() => setIsDeleteOpen(true)}
-                className="hover:bg-red-200"
+                className="hover:bg-destructive/20"
               >
                 <TrashIcon className="h-4 w-4 text-destructive" />
               </Button>
@@ -106,22 +107,22 @@ export function PetCard({ pet, onUpdate }: PetCardProps) {
         <CardContent className="pt-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="flex items-center space-x-2">
-              <PawPrint className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm">
+              <PawPrint className="h-4 w-4 text-secondary" />
+              <span className="text-sm text-foreground">
                 {pet.breed || pet.species}
               </span>
             </div>
             <div className="flex items-center space-x-2">
-              <Cake className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm">{pet.age} years old</span>
+              <Cake className="h-4 w-4 text-secondary" />
+              <span className="text-sm text-foreground">{pet.age} years old</span>
             </div>
             <div className="flex items-center space-x-2">
-              <Weight className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm">{pet.weight} kg</span>
+              <Weight className="h-4 w-4 text-secondary" />
+              <span className="text-sm text-foreground">{pet.weight} kg</span>
             </div>
             <div className="flex items-center space-x-2">
-              <ClipboardList className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm">
+              <ClipboardList className="h-4 w-4 text-secondary" />
+              <span className="text-sm text-foreground">
                 {pet.medicalHistory ? pet.medicalHistory.length : 0} medical records
               </span>
             </div>

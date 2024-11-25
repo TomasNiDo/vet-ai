@@ -6,6 +6,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import Link from 'next/link';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -27,7 +28,7 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center">
       <div className="w-full max-w-md space-y-8 p-8">
         <div className="text-center">
-          <h1 className="text-2xl font-bold">Sign in to Vet AI</h1>
+          <h1 className="text-2xl font-bold">Sign in to FurSure AI</h1>
           <p className="mt-2 text-gray-600">Welcome back!</p>
         </div>
         
@@ -57,6 +58,13 @@ export default function LoginPage() {
           <Button type="submit" className="w-full">
             Sign in
           </Button>
+
+          <p className="text-center text-sm text-gray-600">
+            Need an account?{' '}
+            <Link href="/register" className="text-primary hover:underline">
+              Sign up
+            </Link>
+          </p>
         </form>
       </div>
     </div>

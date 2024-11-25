@@ -49,7 +49,7 @@ export function Navbar() {
                 <Link href="/login">Login</Link>
               </Button>
               <Button className="bg-primary text-white hover:bg-primary/90">
-                <Link href="/signup">Try FurSure AI</Link>
+                <Link href="/register">Try FurSure AI</Link>
               </Button>
             </>
           )}

@@ -4,33 +4,33 @@
  
 @layer base {
   :root {
-    --background: 210 40% 98%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 60 100% 99.5%;    /* #fffffd */
+    --foreground: 225 33% 13%;      /* #151b2d */
     
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 60 100% 99.5%;          /* #fffffd */
+    --card-foreground: 225 33% 13%; /* #151b2d */
  
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 60 100% 99.5%;       /* #fffffd */
+    --popover-foreground: 225 33% 13%; /* #151b2d */
  
-    --primary: 201 96% 32%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 225 33% 13%;         /* #151b2d */
+    --primary-foreground: 60 100% 99.5%; /* #fffffd */
  
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 39 89% 64%;        /* #f5c055 */
+    --secondary-foreground: 225 33% 13%; /* #151b2d */
  
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 225 33% 95%;
+    --muted-foreground: 225 33% 40%;
  
-    --accent: 35 91% 62%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 339 59% 55%;          /* #c94f7f */
+    --accent-foreground: 60 100% 99.5%; /* #fffffd */
  
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 339 59% 55%;     /* #c94f7f */
+    --destructive-foreground: 60 100% 99.5%; /* #fffffd */
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
+    --border: 225 33% 90%;
+    --input: 225 33% 90%;
+    --ring: 339 59% 55%;            /* #c94f7f */
  
     --radius: 0.75rem;
   }
@@ -46,10 +46,10 @@
 }
 
 .gradient-text {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400;
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-secondary to-accent;
 }
 
 .gradient-bg {
-  @apply bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10;
+  @apply bg-gradient-to-r from-secondary/10 via-accent/10 to-secondary/10;
 }
 
