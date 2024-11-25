@@ -99,7 +99,7 @@ export function PetCard({ pet, onUpdate }: PetCardProps) {
                 onClick={() => setIsDeleteOpen(true)}
                 className="hover:bg-destructive/20"
               >
-                <TrashIcon className="h-4 w-4 text-destructive" />
+                <TrashIcon className="h-4 w-4 text-secondary" />
               </Button>
             </Tooltip>
           </div>

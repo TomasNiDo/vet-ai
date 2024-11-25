@@ -35,9 +35,11 @@ export function DeletePetDialog({ pet, open, onOpenChange, onDelete }: DeletePet
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Delete {pet.name}</DialogTitle>
-          <DialogDescription className="mt-4">
-            Are you sure you want to delete {pet.name}? This action cannot be undone.
-          </DialogDescription>
+          <div className="mt-4">
+            <DialogDescription>
+              Are you sure you want to delete {pet.name}? This action cannot be undone.
+            </DialogDescription>
+          </div>
         </DialogHeader>
         <div className="flex justify-end space-x-2 mt-6">
           <Button
