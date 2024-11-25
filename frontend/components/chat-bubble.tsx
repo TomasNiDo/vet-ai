@@ -7,9 +7,10 @@ interface ChatBubbleProps {
   avatar?: string
   isAudio?: boolean
   className?: string
+  role?: string,
 }
 
-export function ChatBubble({ message, timestamp, avatar, isAudio, className }: ChatBubbleProps) {
+export function ChatBubble({ message, timestamp, avatar, isAudio, className, role }: ChatBubbleProps) {
   return (
     <div className={cn("flex items-start space-x-2 max-w-[280px]", className)}>
       {avatar && (
@@ -21,7 +22,7 @@ export function ChatBubble({ message, timestamp, avatar, isAudio, className }: C
       <div className="flex flex-col space-y-1">
         <div className={cn(
           "rounded-2xl p-3 text-sm",
-          isAudio ? "bg-accent/20" : "bg-accent"
+          role === 'assistant' ? "bg-secondary/20" : "bg-primary text-primary-foreground"
         )}>
           {isAudio ? (
             <div className="flex items-center space-x-2">

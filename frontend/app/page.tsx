@@ -73,23 +73,25 @@ function HeroSection() {
                 message="Hello! What questions do you have about your pet's health today? 🐾"
                 timestamp="10:57 AM"
                 className="ml-8"
+                role="assistant"
               />
               <ChatBubble 
                 message="Hi FurSure AI, my cat has been drinking more water than usual. Should I be concerned?"
                 timestamp="11:34 AM"
                 avatar={testimonialImage3.src}
+                role="user"
               />
               <ChatBubble 
                 message="Increased thirst in cats can be a sign of various health issues. It's important to monitor this change. Here are some possible reasons and next steps..."
                 timestamp="11:35 AM"
                 className="ml-8"
+                role="assistant"
               />
             </div>
           </div>
 
           {/* Right Column */}
           <div className="relative">
-            <div className="absolute top-0 right-0 w-[200%] h-full bg-gray-100 rounded-l-[3rem] -z-10 translate-x-1/4" />
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}

@@ -28,23 +28,23 @@ export function MedicalHistoryDialog({ pet, open, onOpenChange }: MedicalHistory
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-3xl">
+        <DialogContent>
           <DialogHeader>
             <DialogTitle>Medical History - {pet.name}</DialogTitle>
           </DialogHeader>
           <div className="mt-4 space-y-6">
             {sortedRecords.length === 0 ? (
-              <p className="text-center text-gray-500 py-8">
+              <p className="text-center text-muted-foreground py-8">
                 No medical records yet.
               </p>
             ) : (
               sortedRecords.map((record) => (
                 <div
                   key={record.id}
-                  className="border rounded-lg overflow-hidden"
+                  className="border rounded-lg overflow-hidden bg-card"
                 >
-                  <div className="bg-gray-50 px-4 py-2 border-b flex justify-between items-center">
-                    <span className="font-medium">
+                  <div className="bg-secondary/10 px-4 py-2 border-b flex justify-between items-center">
+                    <span className="font-medium text-foreground">
                       {format(record.date, 'MMMM d, yyyy')}
                     </span>
                     <Tooltip content="Edit Record">
@@ -52,42 +52,42 @@ export function MedicalHistoryDialog({ pet, open, onOpenChange }: MedicalHistory
                         variant="ghost"
                         size="icon"
                         onClick={() => handleEdit(record)}
-                        className="h-8 w-8 hover:bg-gray-200"
+                        className="h-8 w-8 hover:bg-secondary/20"
                       >
-                        <PencilIcon className="h-4 w-4" />
+                        <PencilIcon className="h-4 w-4 text-secondary" />
                       </Button>
                     </Tooltip>
                   </div>
                   <div className="p-4 space-y-4">
                     <div className="space-y-2">
-                      <div className="flex items-center gap-2 text-orange-600">
+                      <div className="flex items-center gap-2 text-secondary">
                         <Thermometer className="h-4 w-4" />
                         <span className="font-medium">Symptoms</span>
                       </div>
-                      <p className="text-sm text-gray-600 bg-orange-50 p-3 rounded">
+                      <p className="text-sm text-foreground bg-secondary/5 p-3 rounded">
                         {record.symptoms}
                       </p>
                     </div>
                     <div className="space-y-2">
-                      <div className="flex items-center gap-2 text-blue-600">
+                      <div className="flex items-center gap-2 text-accent">
                         <Stethoscope className="h-4 w-4" />
                         <span className="font-medium">Diagnosis</span>
                       </div>
-                      <p className="text-sm text-gray-600 bg-blue-50 p-3 rounded">
+                      <p className="text-sm text-foreground bg-accent/5 p-3 rounded">
                         {record.diagnosis}
                       </p>
                     </div>
                     <div className="space-y-2">
-                      <div className="flex items-center gap-2 text-green-600">
+                      <div className="flex items-center gap-2 text-primary">
                         <Syringe className="h-4 w-4" />
                         <span className="font-medium">Treatment</span>
                       </div>
-                      <p className="text-sm text-gray-600 bg-green-50 p-3 rounded">
+                      <p className="text-sm text-foreground bg-primary/5 p-3 rounded">
                         {record.treatment}
                       </p>
                     </div>
                     {record.notes && (
-                      <div className="mt-4 text-sm text-gray-500 bg-gray-50 p-3 rounded border">
+                      <div className="mt-4 text-sm text-muted-foreground bg-muted p-3 rounded border">
                         <span className="font-medium">Additional Notes:</span>
                         <p className="mt-1">{record.notes}</p>
                       </div>
@@ -109,7 +109,6 @@ export function MedicalHistoryDialog({ pet, open, onOpenChange }: MedicalHistory
           onUpdate={() => {
             setIsEditDialogOpen(false);
             setEditingRecord(null);
-            // Trigger a refresh of the pet data
             window.location.reload();
           }}
         />

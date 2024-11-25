@@ -39,7 +39,7 @@ export function PetList() {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-[200px]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
   }
@@ -47,8 +47,11 @@ export function PetList() {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">My Pets</h1>
-        <Button onClick={() => setIsAddDialogOpen(true)}>
+        <h1 className="text-2xl font-bold text-foreground">My Pets</h1>
+        <Button 
+          onClick={() => setIsAddDialogOpen(true)}
+          className="bg-secondary text-secondary-foreground hover:bg-secondary/90"
+        >
           <PlusIcon className="h-4 w-4 mr-2" />
           Add Pet
         </Button>
@@ -56,8 +59,11 @@ export function PetList() {
 
       {pets.length === 0 ? (
         <div className="text-center py-12">
-          <p className="text-gray-500 mb-4">You haven&apos;t added any pets yet.</p>
-          <Button onClick={() => setIsAddDialogOpen(true)}>
+          <p className="text-muted-foreground mb-4">You haven&apos;t added any pets yet.</p>
+          <Button 
+            onClick={() => setIsAddDialogOpen(true)}
+            className="bg-secondary text-secondary-foreground hover:bg-secondary/90"
+          >
             <PlusIcon className="h-4 w-4 mr-2" />
             Add Your First Pet
           </Button>

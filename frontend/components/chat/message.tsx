@@ -8,27 +8,27 @@ export function Message({ message }: { message: ChatMessage }) {
   return (
     <div className={`flex items-start gap-3 ${isAi ? 'justify-start' : 'flex-row-reverse'}`}>
       <div className={`flex items-center justify-center w-8 h-8 rounded-full shrink-0 ${
-        isAi ? 'bg-blue-100' : 'bg-blue-500'
+        isAi ? 'bg-secondary/20' : 'bg-primary'
       }`}>
         {isAi ? (
-          <Bot className="w-5 h-5 text-blue-500" />
+          <Bot className="w-5 h-5 text-secondary" />
         ) : (
-          <User className="w-5 h-5 text-white" />
+          <User className="w-5 h-5 text-primary-foreground" />
         )}
       </div>
       <div 
         className={`relative inline-block max-w-[80%] rounded-2xl px-4 py-3 ${
           isAi 
-            ? 'bg-gray-50 text-gray-900' 
-            : 'bg-blue-500 text-white'
+            ? 'bg-secondary/5 text-foreground' 
+            : 'bg-primary text-primary-foreground'
         }`}
       >
         {/* Arrow for chat bubble */}
         <div className={`absolute top-4 ${isAi ? '-left-2' : '-right-2'} w-0 h-0 
           border-solid border-4 ${
             isAi 
-              ? 'border-l-transparent border-t-transparent border-b-transparent border-r-gray-50' 
-              : 'border-r-transparent border-t-transparent border-b-transparent border-l-blue-500'
+              ? 'border-l-transparent border-t-transparent border-b-transparent border-r-secondary/5' 
+              : 'border-r-transparent border-t-transparent border-b-transparent border-l-primary'
           }`}
         />
         
